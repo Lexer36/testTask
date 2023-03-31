@@ -1,0 +1,29 @@
+-- FUNCTION: shema.test_notify()
+
+-- DROP FUNCTION IF EXISTS shema.test_notify();
+
+CREATE OR REPLACE FUNCTION shema.test_notify()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+    BEGIN
+        NOTIFY mymessage, 'fired by NOTIFY';
+        RETURN NULL;
+    END; 
+$BODY$;
+
+ALTER FUNCTION shema.test_notify()
+    OWNER TO alex;
+
+
+-- Trigger: test_notify_qt
+
+-- DROP TRIGGER IF EXISTS test_notify_qt ON shema.testtest;
+
+CREATE TRIGGER test_notify_qt
+    AFTER INSERT OR UPDATE 
+    ON shema.testtest
+    FOR EACH ROW
+    EXECUTE FUNCTION shema.test_notify();
