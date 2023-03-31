@@ -17,13 +17,12 @@ $BODY$;
 ALTER FUNCTION shema.test_notify()
     OWNER TO alex;
 
+-- Trigger: notify_qt
 
--- Trigger: test_notify_qt
+-- DROP TRIGGER IF EXISTS notify_qt ON shema."TEST";
 
--- DROP TRIGGER IF EXISTS test_notify_qt ON shema.testtest;
-
-CREATE TRIGGER test_notify_qt
-    AFTER INSERT OR UPDATE 
-    ON shema.testtest
+CREATE TRIGGER notify_qt
+    AFTER INSERT
+    ON shema."TEST"
     FOR EACH ROW
     EXECUTE FUNCTION shema.test_notify();
